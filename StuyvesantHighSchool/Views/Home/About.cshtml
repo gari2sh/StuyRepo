@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Enrollment Statistics";
+}
+<h2>@ViewData["Title"]</h2>
+<h3>@ViewData["Message"]</h3>
+
+@model IEnumerable<StuyvesantHighSchool.Models.StuyViewModels.EnrollDtGrp>
+
+@{
+    ViewData["Title"] = "Enrollment Statistics";
+}
+
+<h4>Students Enrollment based on date:</h4>
+
+<table>
+    <tr>
+        <th style="padding-right: 50px">
+            Enrollment Date
+        </th>
+        <th>
+            #Students
+        </th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td >
+                @Html.DisplayFor(modelItem => item.EnrollmentDate)
+            </td>
+            <td>
+                @item.StudentCount
+            </td>
+        </tr>
+    }
+</table>

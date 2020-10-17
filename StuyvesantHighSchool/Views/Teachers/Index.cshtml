@@ -1,0 +1,126 @@
+﻿@model StuyvesantHighSchool.Models.StuyViewModels.TeacherIndexVM
+
+@{
+    ViewData["Title"] = "Teachers";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Last Name</th>
+            <th>First Name</th>
+            <th>Join Date</th>
+            <th>Room#</th>
+            <th>Courses</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Teachers)
+        {
+            string selectedRow = "";
+            if (item.TeacherID == (int?)ViewData["TeacherID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.JoinDate)
+                </td>
+                <td>
+                    @if (item.RoomAssignment != null)
+                    {
+                        @item.RoomAssignment.Room
+                    }
+                </td>
+                <td>
+                    @{
+                        foreach (var subject in item.SubjectAssignments)
+                        {
+                            @subject.Subject.SubjectID @:  @subject.Subject.Title <br />
+                        }
+                    }
+                </td>
+                <td>
+                    <a asp-action="Index" asp-route-id="@item.TeacherID">Select</a> |
+                    <a asp-action="Edit" asp-route-id="@item.TeacherID">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.TeacherID">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.TeacherID">Delete</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@if (Model.Subjects != null)
+{
+    <h3>Subjects Instructed by Teacher</h3>
+    <table class="table">
+        <tr>
+            <th></th>
+            <th>Number</th>
+            <th>Title</th>
+            <th>Department</th>
+        </tr>
+
+        @foreach (var item in Model.Subjects)
+        {
+            string selectedRow = "";
+            if (item.SubjectID == (int?)ViewData["SubjectID"])
+            {
+                selectedRow = "success";
+            }
+            <tr class="@selectedRow">
+                <td>
+                    @Html.ActionLink("Select", "Index", new { subjectID = item.SubjectID })
+                </td>
+                <td>
+                    @item.SubjectID
+                </td>
+                <td>
+                    @item.Title
+                </td>
+                <td>
+                    @item.Department.Name
+                </td>
+            </tr>
+        }
+
+    </table>
+}
+
+@if (Model.Enrollments != null)
+{
+    <h3>
+        Students Enrolled in the Subject
+    </h3>
+    <table class="table">
+        <tr>
+            <th>Name</th>
+            <th>Score</th>
+        </tr>
+        @foreach (var item in Model.Enrollments)
+        {
+            <tr>
+                <td>
+                    @item.Student.FullName
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Score)
+                </td>
+            </tr>
+        }
+    </table>
+}

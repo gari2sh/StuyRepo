@@ -1,0 +1,77 @@
+﻿@model StuyvesantHighSchool.Models.Teacher
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<h4>Teacher</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TeacherID" />
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstName" class="control-label"></label>
+                <input asp-for="FirstName" class="form-control" />
+                <span asp-validation-for="FirstName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="JoinDate" class="control-label"></label>
+                <input asp-for="JoinDate" class="form-control" />
+                <span asp-validation-for="JoinDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RoomAssignment.Room" class="control-label"></label>
+                <input asp-for="RoomAssignment.Room" class="form-control" />
+                <span asp-validation-for="RoomAssignment.Room" class="text-danger" />
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <table style="width:400px">
+                        <tr>
+                            @{
+                                int cnt = 0;
+                                List<StuyvesantHighSchool.Models.StuyViewModels.RelatedSubjectVM> subjects = ViewBag.Subjects;
+
+                                foreach (var subject in subjects)
+                                {
+                                    if (cnt++ % 2 == 0)
+                                    {
+                                    @:</tr><tr>
+                                    }
+                                    @:<td valign="top" style="padding-bottom: 10px;">
+                                        <input type="checkbox"
+                                               name="selectedSubjects"
+                                               value="@subject.SubjectID"
+                                               @(Html.Raw(subject.RelatedSubject ? "checked=\"checked\"" : "")) />
+                                        @subject.SubjectID @:  @subject.Title
+                                    @:</td>
+                                }
+                            @:</tr>
+                            }
+                        </table>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-default" />
+                </div>
+            </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
